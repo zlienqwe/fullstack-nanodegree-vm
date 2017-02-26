@@ -85,7 +85,6 @@ class WebServerHandler(BaseHTTPRequestHandler):
 	def do_POST(self):
 		try:
 			if self.path.endswith('/add'):
-				print '=====rr'
 				ctype, pdict = cgi.parse_header(
 					self.headers.getheader('content-type'))
 				if ctype == 'multipart/form-data':
