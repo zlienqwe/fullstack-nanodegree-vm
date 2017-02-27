@@ -29,14 +29,13 @@ class WebServerHandler(BaseHTTPRequestHandler):
 				output += "<h3>"
 				output += restaurant.name + '=====' + str(restaurant.id)
 				output += '<br>'
-				output += "<a href='/restaurants/%s/edit'>edit</a>  =====    "
+				output += "<a href='/restaurants/%s/edit'>edit</a>  =====    " % str(restaurant.id)
 				output += "<a href='/restaurants/%s/delete'>delete</a>" % str(restaurant.id)
 				output += "</h3>"
 				output += '<br>'
 			output += "<br><br><br><a href='/restaurants/create'>create a new restaurant</a>"
 			output += "</body></html>"
 			self.wfile.write(output)
-			print output
 			return
 		elif self.path.endswith('/restaurants/create'):
 			self.send_response(200)
@@ -71,8 +70,7 @@ class WebServerHandler(BaseHTTPRequestHandler):
 
 		elif self.path.endswith('/delete'):
 			restaurantId = self.path.split('/')[2]
-			print '=========@@@@@@@@@@@@'
-			print restaurantId
+
 			deleteRestaurantQuery = session.query(Restaurant).filter_by(id=restaurantId).one()
 			if deleteRestaurantQuery:
 				self.send_response(200)
@@ -131,6 +129,8 @@ class WebServerHandler(BaseHTTPRequestHandler):
 						self.end_headers()
 
 			elif self.path.endswith("/delete"):
+				ctype, pdict = cgi.parse_header(
+					self.headers.getheader('content-type'))
 				if ctype == 'multipart/form-data':
 					fields = cgi.parse_multipart(self.rfile, pdict)
 					thisRestaurantId = self.path.split('/')[2]
