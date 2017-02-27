@@ -31,7 +31,6 @@ class WebServerHandler(BaseHTTPRequestHandler):
 			output += "<a href='/puppys/add'>add new puppy</a><br>"
 			for puppy in allPuppyList:
 				output += puppy.name
-
 				output += '<br>'
 				output += "<a href='/puppy/%s/edit'>edit</a>" % str(puppy.id) 
 				output += '<br>'
@@ -139,7 +138,7 @@ class WebServerHandler(BaseHTTPRequestHandler):
 
 def main():
 	try:
-		port = 9999
+		port = 8080
 		server = HTTPServer(("", port), WebServerHandler)
 		print "puppy webserver is running."
 		server.serve_forever()
