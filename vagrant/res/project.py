@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from db import Base, Restaurant, MenuItem
@@ -36,6 +36,7 @@ def newMenuItem(restaurant_id):
         newItem = MenuItem(name = request.form['NewItem'], restaurant_id = restaurant_id)
         session.add(newItem)
         session.commit()
+        flash("create a new item")
         return redirect(url_for('restaurantMenu', restaurant_id = restaurant_id))
     else:
         restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
@@ -52,6 +53,7 @@ def editMenuItem(restaurant_id, menu_id):
         editItem.name = request.form['editedMenuItem']
         session.add(editItem)
         session.commit()
+        flash("changes item's name")
         return redirect(url_for('restaurantMenu', restaurant_id = restaurant_id))
     else:
         restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
@@ -68,6 +70,7 @@ def deleteMenuItem(restaurant_id, menu_id):
         deleteItem = session.query(MenuItem).filter_by(id=menu_id).one()
         session.delete(deleteItem)
         session.commit()
+        flash("delete a item")
         return redirect(url_for('restaurantMenu', restaurant_id = restaurant_id))
     else:
         restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
@@ -75,5 +78,6 @@ def deleteMenuItem(restaurant_id, menu_id):
         return render_template('deleteItem.html', restaurant = restaurant, item = item)
 
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
