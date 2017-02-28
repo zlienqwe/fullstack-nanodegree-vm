@@ -6,7 +6,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from db import Base, Restaurant, MenuItem
 
-
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind = engine)
@@ -27,10 +26,10 @@ class WebServerHandler(BaseHTTPRequestHandler):
 			output += "<h2>Here is the list of restaurants:</h2>"
 			for restaurant in restaurants:
 				output += "<h3>"
-				output += restaurant.name + '=====' + str(restaurant.id)
+				output += "<b>%s</b>" % restaurant.name
 				output += '<br>'
-				output += "<a href='/restaurants/%s/edit'>edit</a>  =====    " % str(restaurant.id)
-				output += "<a href='/restaurants/%s/delete'>delete</a>" % str(restaurant.id)
+				output += "<a style='margin-right: 15px; color: #5fb7c1; text-decoration: none;' href='/restaurants/%s/edit'>edit</a>    " % str(restaurant.id)
+				output += "<a style='text-decoration: none; color: red;' href='/restaurants/%s/delete'>delete</a>" % str(restaurant.id)
 				output += "</h3>"
 				output += '<br>'
 			output += "<br><br><br><a href='/restaurants/create'>create a new restaurant</a>"
@@ -147,7 +146,7 @@ class WebServerHandler(BaseHTTPRequestHandler):
 
 def main():
 	try:
-		port = 8080
+		port = 9999
 		server = HTTPServer(('', port), WebServerHandler)
 		print 'webserver runing on port %s' % port
 		server.serve_forever()
